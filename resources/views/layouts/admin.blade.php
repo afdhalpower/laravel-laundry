@@ -134,10 +134,11 @@
             <i class="bi bi-droplet-half"></i>
             LaundryKu
         </div>
-        <div class="nav-section">Menu Utama</div>
+                <div class="nav-section">Menu Utama</div>
         <a href="{{ route("dashboard") }}" class="nav-link {{ request()->routeIs("dashboard") ? "active" : "" }}">
             <i class="bi bi-speedometer2"></i> Dashboard
         </a>
+        
         @if(auth()->user()->isAdmin() || auth()->user()->isKasir())
         <a href="{{ route("orders.index") }}" class="nav-link {{ request()->routeIs("orders.*") ? "active" : "" }}">
             <i class="bi bi-receipt"></i> Transaksi
@@ -154,33 +155,30 @@
         @endif
 
         @if(auth()->user()->isAdmin() || auth()->user()->isOwner())
-        <a href="{{ route("reports") }}" class="nav-link {{ request()->routeIs("reports") ? "active" : "" }}">
+        <a href="{{ route("reports") }}" class="nav-link {{ request()->routeIs("reports") && !request()->routeIs("reports.profit-loss") ? "active" : "" }}">
             <i class="bi bi-bar-chart"></i> Laporan
+        </a>
+        <a href="{{ route("reports.profit-loss") }}" class="nav-link ms-3 {{ request()->routeIs("reports.profit-loss") ? "active" : "" }}" style="font-size:0.85rem">
+            <i class="bi bi-calculator"></i> Laba-Rugi
         </a>
         @endif
 
         @if(auth()->user()->isAdmin())
-        @can("expenses-access")
         <a href="{{ route("expenses.index") }}" class="nav-link {{ request()->routeIs("expenses.*") ? "active" : "" }}">
             <i class="bi bi-cash-stack"></i> Pengeluaran
         </a>
-        @endcan
-        @can("packages-access")
         <a href="{{ route("packages.index") }}" class="nav-link {{ request()->routeIs("packages.*") ? "active" : "" }}">
             <i class="bi bi-box-seam"></i> Paket
         </a>
-        @endcan
+        @endif
+
+        @if(auth()->user()->isAdmin() || auth()->user()->isOwner())
+        <a href="{{ route("activity-logs.index") }}" class="nav-link {{ request()->routeIs("activity-logs.*") ? "active" : "" }}">
+            <i class="bi bi-clock-history"></i> Activity Log
+        </a>
         @endif
 
         <div class="nav-section mt-3">Halaman Depan</div>
-        <div class="nav-section">
-            <a href="{{ route("expenses.index") }}" class="nav-link \{{ request()->routeIs("expenses.*") ? "active" : "" }}">
-                <i class="bi bi-receipt"></i> Pengeluaran
-            </a>
-            <a href="{{ route("packages.index") }}" class="nav-link \{{ request()->routeIs("packages.*") ? "active" : "" }}">
-                <i class="bi bi-box"></i> Paket
-            </a>
-        </div>
         @if(auth()->user()->isAdmin())
         <a href="{{ route("admin.landing-settings.index") }}" class="nav-link {{ request()->routeIs("admin.landing-settings.*") ? "active" : "" }}">
             <i class="bi bi-sliders"></i> Pengaturan
@@ -190,12 +188,6 @@
         </a>
         <a href="{{ route("admin.galleries.index") }}" class="nav-link {{ request()->routeIs("admin.galleries.*") ? "active" : "" }}">
             <i class="bi bi-images"></i> Galeri
-        </a>
-        @endif
-
-        @if(auth()->user()->isAdmin() || auth()->user()->isOwner())
-        <a href="{{ route("activity-logs.index") }}" class="nav-link {{ request()->routeIs("activity-logs.*") ? "active" : "" }}">
-            <i class="bi bi-clock-history"></i> Activity Log
         </a>
         @endif
         <div class="nav-section mt-3">Akun</div>

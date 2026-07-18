@@ -51,6 +51,7 @@ Route::middleware(["auth", "verified"])->group(function () {
     Route::middleware("role:admin,owner")->group(function () {
         Route::get("/reports", [ReportController::class, "index"])->name("reports");
         Route::get("/reports/export", [ReportController::class, "export"])->name("reports.export");
+Route::get("/reports/profit-loss", [ReportController::class, "profitLoss"])->name("reports.profit-loss");
 
         // Activity Logs - admin & owner only
         Route::get("/activity-logs", [ActivityLogController::class, "index"])->name("activity-logs.index");
