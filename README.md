@@ -30,19 +30,17 @@
 
 | Fitur | Keterangan |
 |-------|------------|
-| 👥 **Manajemen Pelanggan** | CRUD pelanggan dengan pencarian, **detail + riwayat transaksi** |
-| 🛠️ **Layanan Laundry** | Kelola layanan kiloan & satuan, masing-masing dengan harga dan estimasi |
-| 📋 **Transaksi / Order** | Buat order dengan multiple item, pilih layanan, tracking status otomatis |
+| 👥 **Manajemen Pelanggan** | CRUD pelanggan, **detail + riwayat transaksi**, sistem **Loyalty Points** (earn & redeem) |
+| 🛠️ **Layanan Laundry** | Kelola layanan kiloan & satuan, manajemen **Paket Laundry** |
+| 📋 **Transaksi / Order** | Buat order, pilih layanan, tracking status, **auto-lock saat selesai**, **cetak barcode label** |
 | 🔄 **Status Tracking** | Alur: Diterima → Dicuci → Dikeringkan → Disetrika → Dilipat → Siap → Diantar → Selesai |
-| 🔍 **Cek Status Publik** | Pelanggan cek status pakaian via **landing page** menggunakan nomor order dari invoice + **progress timeline visual** |
-| 💰 **Pembayaran** | Catat pembayaran, histori cicilan, **edit/hapus pembayaran**, indikator lunas/sisa otomatis, **auto-advance status** saat lunas |
-| 🗑️ **Trash & Restore** | Order yang dihapus masuk ke **Trash**, bisa direstore kapan saja |
-| 📊 **Export Excel** | Laporan bisa **diexport ke format Excel (.xlsx)** |
-| 🖨️ **Invoice** | Cetak struk invoice, siap untuk thermal printer 58mm |
-| 📊 **Dashboard** | Statistik real-time (hari ini & 7 hari), grafik pendapatan, order terbaru |
-| 📈 **Laporan** | Filter tanggal, grafik pendapatan, daftar transaksi lengkap |
-| 🌐 **Landing Page** | Halaman publik dengan hero, layanan, testimoni, galeri, CTA WhatsApp, dan **Cek Status** — dikelola dari admin |
-| 📱 **Responsive** | Bootstrap 5, mobile-first, bekerja di HP & desktop |
+| 🔍 **Cek Status Publik** | Pelanggan cek status pakaian via **landing page** dengan nomor order |
+| 💰 **Pembayaran** | Catat pembayaran, histori cicilan, edit/hapus pembayaran, **laporan laba-rugi** |
+| 🗑️ **Trash & Restore** | Order yang dihapus masuk ke **Trash**, bisa direstore |
+| 📊 **Export Excel** | Laporan transaksi bisa di-export ke **format .xlsx** |
+| 📝 **Activity Log** | Tracking semua perubahan data untuk keamanan & audit |
+| ⚙️ **Multi-Role** | Akses dibatasi: Admin (full), Kasir (transaksi), Owner (laporan) |
+| 🌗 **Dark Mode** | Toggle tema terang/gelap yang persisten |
 
 ---
 
@@ -84,8 +82,6 @@ php artisan serve
 
 Akses di **http://localhost:8000**
 
-> **Catatan:** Untuk MySQL, ubah `DB_CONNECTION=sqlite` menjadi `DB_CONNECTION=mysql` di `.env` dan isi kredensial database.
-
 ---
 
 ## 🔐 Login Default
@@ -93,8 +89,8 @@ Akses di **http://localhost:8000**
 | Role | Email | Password |
 |------|-------|----------|
 | Admin | `admin@laundryku.com` | `password` |
-
-> ⚠️ **Segera ganti password** setelah pertama kali login pada lingkungan produksi.
+| Kasir | `kasir@laundryku.com` | `password` |
+| Owner | `owner@laundryku.com` | `password` |
 
 ---
 
@@ -102,81 +98,40 @@ Akses di **http://localhost:8000**
 
 | Langkah | Detail |
 |---------|--------|
-| **1. Upload** | Upload semua file ke hosting (kecuali folder `storage` bawaan Laravel) |
-| **2. Document Root** | Arahkan Document Root ke folder `public/` |
-| **3. Database** | Buat database MySQL via phpMyAdmin / cPanel |
+| **1. Upload** | Upload semua file ke hosting |
+| **2. Document Root** | Arahkan ke folder `public/` |
+| **3. Database** | Buat database MySQL via cPanel |
 | **4. Environment** | Edit `.env` — ganti `sqlite` → `mysql`, isi kredensial DB |
-| **5. Migrasi** | Jalankan `php artisan migrate --seed` via SSH/Terminal |
-| **6. Permission** | Set permission `storage/` dan `bootstrap/cache/` ke `755` |
-| **7. Selesai** | Website siap diakses |
+| **5. Migrasi** | Jalankan `php artisan migrate --seed` |
+| **6. Permission** | Set `storage/` dan `bootstrap/cache/` ke `755` |
 
 ---
 
 ## 🗂️ Struktur Database
 
 ```
-customers ──→ orders ──→ order_items ──→ services
-                  │
-                  └──→ payments
-```
-
-### Model Utama
-
-| Model | Tabel | Keterangan |
-|-------|-------|------------|
-| `Customer` | `customers` | Data pelanggan (nama, telepon, alamat) |
-| `Service` | `services` | Jenis layanan (nama, tipe, harga, estimasi) |
-| `Order` | `orders` | Transaksi utama (no_order, tgl, status, total, soft delete) |
-| `OrderItem` | `order_items` | Item detail transaksi (layanan, berat/jumlah, subtotal) |
-| `Payment` | `payments` | Riwayat pembayaran (jumlah, metode, tanggal) |
-| `SiteSetting` | `site_settings` | Pengaturan landing page (hero, tentang, kontak) |
-| `Testimonial` | `testimonials` | Testimoni pelanggan untuk landing page |
-| `Gallery` | `galleries` | Foto galeri untuk landing page |
-
-### Alur Cek Status Publik
-
-```
-Admin buat transaksi → cetak invoice dengan No. Order (LND260718XXX)
-                           ↓
-Pelanggan buka https://laundryku.com/cek-status
-                           ↓
-Masukkan No. Order → lihat status real-time + progress timeline
+users, customers, orders, order_items, services, payments, expenses, packages, loyalty_points, activity_logs
 ```
 
 ---
 
 ## 🎨 Tampilan
 
-| Area | Teknologi |
-|------|-----------|
-| **Admin Panel** | Bootstrap 5.3, sidebar gradasi navy, Inter font |
-| **Landing Page** | Custom design, bento grid, scroll reveal animation, responsive |
-| **Cek Status** | Halaman publik dengan search bar, kartu info, progress timeline 8 tahap, tabel layanan, status bayar |
-| **Detail Pelanggan** | Kartu info pelanggan + tabel riwayat transaksi dengan pagination |
-| **Dashboard** | 4 kartu statistik + grafik Chart.js (7 hari) + daftar order terbaru |
-| **Invoice** | Via Bootstrap, siap cetak thermal printer 58mm |
-| **Trash Order** | Daftar order yang dihapus dengan tombol restore |
-| **Notifikasi** | Flash message sukses/error via Bootstrap alert |
-| **Auth** | Laravel Breeze Blade dengan layout konsisten |
+- **Admin Panel**: Bootstrap 5.3, sidebar navy, **Dark Mode ready**.
+- **Fitur Baru**: Laporan Laba-Rugi (Chart.js), Detail Pelanggan, Trash, Activity Log.
+- **Tools**: Barcode generator (Milon), Excel Export (Maatwebsite).
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Layer | Teknologi |
-|-------|-----------|
-| **Backend** | Laravel 11, PHP 8.3 |
-| **Database** | SQLite (dev) / MySQL 5.7+ (prod) |
-| **Frontend** | Bootstrap 5.3, Chart.js 4, Bootstrap Icons |
-| **Export** | Laravel Excel (Maatwebsite) — format .xlsx |
-| **Auth** | Laravel Breeze (Blade + Tailwind CSS) |
-| **Font** | Inter (Google Fonts) |
-| **Animasi** | Intersection Observer API, CSS transitions |
+- **Backend**: Laravel 11, PHP 8.3
+- **Database**: SQLite (dev) / MySQL (prod)
+- **Frontend**: Bootstrap 5.3, Chart.js, Bootstrap Icons
+- **Packages**: maatwebsite/excel, milon/barcode
 
 ---
 
 ## 📄 Lisensi
 
 **MIT License** — © 2026 [afdhalpower](https://github.com/afdhalpower)
-
-Dipersilakan untuk digunakan, dimodifikasi, dan didistribusikan kembali.
