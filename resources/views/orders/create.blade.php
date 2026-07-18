@@ -200,13 +200,15 @@ function updateTotal() {
         total += parseFloat(el.value) || 0;
     });
     document.getElementById("total-display").textContent = "Rp " + Math.round(total).toLocaleString("id-ID");
-    // Add hidden total input
+    // Add hidden total input — pastikan di form orders, bukan form lain (mis. logout)
     let totalInput = document.querySelector("input[name='total_harga']");
-    if (!totalInput) {
+    const orderForm = document.querySelector("form[action$='/orders']");
+    if (!totalInput || !orderForm.contains(totalInput)) {
+        if (totalInput) totalInput.remove();
         totalInput = document.createElement("input");
         totalInput.type = "hidden";
         totalInput.name = "total_harga";
-        document.querySelector("form").appendChild(totalInput);
+        orderForm.appendChild(totalInput);
     }
     totalInput.value = Math.round(total);
 }
