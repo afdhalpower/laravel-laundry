@@ -11,6 +11,65 @@
     @stack("styles")
     <style>
         :root { --font-sans: "Inter", system-ui, -apple-system, sans-serif; }
+        [data-bs-theme="dark"] {
+            --navy: #3949ab;
+            --sidebar-bg: #1a1a2e;
+            --sidebar-hover: rgba(255,255,255,0.08);
+            --body-bg: #121212;
+            --card-bg: #1e1e1e;
+            --card-border: #2d2d2d;
+            --text-primary: #e0e0e0;
+            --text-muted: #9e9e9e;
+            --heading-color: #e0e0e0;
+            --topbar-bg: #1a1a2e;
+            --topbar-border: #2d2d2d;
+            --table-header-bg: #252525;
+            --table-border: #2d2d2d;
+            --input-bg: #2d2d2d;
+            --input-border: #404040;
+            --input-color: #e0e0e0;
+        }
+        [data-bs-theme="dark"] body { background-color: var(--body-bg); color: var(--text-primary); }
+        [data-bs-theme="dark"] .topbar { background: var(--topbar-bg); border-color: var(--topbar-border); }
+        [data-bs-theme="dark"] .topbar h5 { color: #90caf9; }
+        [data-bs-theme="dark"] .content-wrapper { color: var(--text-primary); }
+        [data-bs-theme="dark"] .stat-card { background: var(--card-bg); border-color: var(--card-border); }
+        [data-bs-theme="dark"] .stat-card .value { color: #90caf9; }
+        [data-bs-theme="dark"] .stat-card .label { color: var(--text-muted); }
+        [data-bs-theme="dark"] .page-title { color: #90caf9; }
+        [data-bs-theme="dark"] .card { background: var(--card-bg); border-color: var(--card-border); }
+        [data-bs-theme="dark"] .card-header { background: var(--card-bg); border-color: var(--card-border); color: var(--text-primary); }
+        [data-bs-theme="dark"] .table { color: var(--text-primary); }
+        [data-bs-theme="dark"] .table th { background: var(--table-header-bg); color: var(--text-muted); border-color: var(--table-border); }
+        [data-bs-theme="dark"] .table td { border-color: var(--table-border); }
+        [data-bs-theme="dark"] .table-hover tbody tr:hover { background: rgba(255,255,255,0.03); }
+        [data-bs-theme="dark"] .table-active { background: rgba(255,255,255,0.05) !important; }
+        [data-bs-theme="dark"] .bg-light { background-color: #2d2d2d !important; }
+        [data-bs-theme="dark"] .text-muted { color: var(--text-muted) !important; }
+        [data-bs-theme="dark"] .btn-outline-secondary { color: var(--text-muted); border-color: #404040; }
+        [data-bs-theme="dark"] .btn-outline-secondary:hover { background: #404040; color: #fff; }
+        [data-bs-theme="dark"] .form-control, [data-bs-theme="dark"] .form-select {
+            background: var(--input-bg); border-color: var(--input-border); color: var(--input-color);
+        }
+        [data-bs-theme="dark"] .form-control:focus, [data-bs-theme="dark"] .form-select:focus {
+            background: var(--input-bg); color: var(--input-color);
+        }
+        [data-bs-theme="dark"] .input-group-text {
+            background: #2d2d2d; border-color: var(--input-border); color: var(--text-muted);
+        }
+        [data-bs-theme="dark"] .alert-success { background: #1b4332; border-color: #2d6a4f; color: #95d5b2; }
+        [data-bs-theme="dark"] .alert-danger { background: #4a1a1a; border-color: #7a1a1a; color: #f5a5a5; }
+        [data-bs-theme="dark"] .btn-primary { background-color: #3949ab; border-color: #3949ab; }
+        [data-bs-theme="dark"] .btn-primary:hover { background-color: #5c6bc0; border-color: #5c6bc0; }
+        [data-bs-theme="dark"] .btn-outline-primary { color: #7986cb; border-color: #7986cb; }
+        [data-bs-theme="dark"] .btn-outline-primary:hover { background-color: #3949ab; border-color: #3949ab; color: #fff; }
+        [data-bs-theme="dark"] .pagination .page-link { background: var(--card-bg); border-color: var(--card-border); color: var(--text-primary); }
+        [data-bs-theme="dark"] .pagination .page-item.active .page-link { background: #3949ab; border-color: #3949ab; }
+        [data-bs-theme="dark"] .page-item.disabled .page-link { background: var(--card-bg); color: var(--text-muted); }
+        [data-bs-theme="dark"] .border-bottom { border-color: var(--card-border) !important; }
+        [data-bs-theme="dark"] hr { border-color: var(--card-border); }
+        [data-bs-theme="dark"] .modal-content { background: var(--card-bg); color: var(--text-primary); border-color: var(--card-border); }
+        [data-bs-theme="dark"] .modal-header { border-color: var(--card-border); }
         body { font-family: var(--font-sans); background-color: #f5f7fa; }
         .sidebar {
             position: fixed; top: 0; left: 0; bottom: 0; width: 250px;
@@ -79,19 +138,50 @@
         <a href="{{ route("dashboard") }}" class="nav-link {{ request()->routeIs("dashboard") ? "active" : "" }}">
             <i class="bi bi-speedometer2"></i> Dashboard
         </a>
+        @if(auth()->user()->isAdmin() || auth()->user()->isKasir())
         <a href="{{ route("orders.index") }}" class="nav-link {{ request()->routeIs("orders.*") ? "active" : "" }}">
             <i class="bi bi-receipt"></i> Transaksi
         </a>
         <a href="{{ route("customers.index") }}" class="nav-link {{ request()->routeIs("customers.*") ? "active" : "" }}">
             <i class="bi bi-people"></i> Pelanggan
         </a>
+        @endif
+
+        @if(auth()->user()->isAdmin())
         <a href="{{ route("services.index") }}" class="nav-link {{ request()->routeIs("services.*") ? "active" : "" }}">
             <i class="bi bi-gear"></i> Layanan
         </a>
+        @endif
+
+        @if(auth()->user()->isAdmin() || auth()->user()->isOwner())
         <a href="{{ route("reports") }}" class="nav-link {{ request()->routeIs("reports") ? "active" : "" }}">
             <i class="bi bi-bar-chart"></i> Laporan
         </a>
+        @endif
+
+        @if(auth()->user()->isAdmin())
+        @can("expenses-access")
+        <a href="{{ route("expenses.index") }}" class="nav-link {{ request()->routeIs("expenses.*") ? "active" : "" }}">
+            <i class="bi bi-cash-stack"></i> Pengeluaran
+        </a>
+        @endcan
+        @can("packages-access")
+        <a href="{{ route("packages.index") }}" class="nav-link {{ request()->routeIs("packages.*") ? "active" : "" }}">
+            <i class="bi bi-box-seam"></i> Paket
+        </a>
+        @endcan
+        @endif
+
         <div class="nav-section mt-3">Halaman Depan</div>
+        <div class="nav-section">
+            <a href="{{ route("expenses.index") }}" class="nav-link \{{ request()->routeIs("expenses.*") ? "active" : "" }}">
+                <i class="bi bi-receipt"></i> Pengeluaran
+            </a>
+            <a href="{{ route("packages.index") }}" class="nav-link \{{ request()->routeIs("packages.*") ? "active" : "" }}">
+                <i class="bi bi-box"></i> Paket
+            </a>
+        </div>
+        @if(auth()->user()->isAdmin())
         <a href="{{ route("admin.landing-settings.index") }}" class="nav-link {{ request()->routeIs("admin.landing-settings.*") ? "active" : "" }}">
             <i class="bi bi-sliders"></i> Pengaturan
         </a>
@@ -101,6 +191,13 @@
         <a href="{{ route("admin.galleries.index") }}" class="nav-link {{ request()->routeIs("admin.galleries.*") ? "active" : "" }}">
             <i class="bi bi-images"></i> Galeri
         </a>
+        @endif
+
+        @if(auth()->user()->isAdmin() || auth()->user()->isOwner())
+        <a href="{{ route("activity-logs.index") }}" class="nav-link {{ request()->routeIs("activity-logs.*") ? "active" : "" }}">
+            <i class="bi bi-clock-history"></i> Activity Log
+        </a>
+        @endif
         <div class="nav-section mt-3">Akun</div>
         <a href="{{ route("profile.edit") }}" class="nav-link">
             <i class="bi bi-person"></i> Profil
@@ -123,7 +220,12 @@
             </button>
             <h5>@yield("page_title", "Dashboard")</h5>
             <div class="d-flex align-items-center gap-2">
+                <button id="darkModeToggle" class="btn btn-sm btn-outline-secondary" title="Toggle Dark Mode"
+                    onclick="toggleDarkMode()">
+                    <i id="darkModeIcon" class="bi bi-moon-stars"></i>
+                </button>
                 <span class="text-muted small">{{ auth()->user()->name ?? "Admin" }}</span>
+                <span class="badge bg-primary me-2">{{ auth()->user()->role ?? "admin" }}</span>
                 <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width:36px;height:36px;font-weight:600;font-size:0.9rem">
                     {{ strtoupper(substr(auth()->user()->name ?? "A", 0, 1)) }}
                 </div>
@@ -147,6 +249,38 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (function() {
+            var theme = localStorage.getItem("theme") || "light";
+            document.documentElement.setAttribute("data-bs-theme", theme);
+            var icon = document.getElementById("darkModeIcon");
+            if (icon) icon.className = theme === "dark" ? "bi bi-sun" : "bi bi-moon-stars";
+        })();
+        function toggleDarkMode() {
+            var html = document.documentElement;
+            var current = html.getAttribute("data-bs-theme");
+            var next = current === "dark" ? "light" : "dark";
+            html.setAttribute("data-bs-theme", next);
+            localStorage.setItem("theme", next);
+            var icon = document.getElementById("darkModeIcon");
+            if (icon) icon.className = next === "dark" ? "bi bi-sun" : "bi bi-moon-stars";
+        }
+    </script>
+
+    <script>
+        // Prevent double form submission
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll("form").forEach(function(form) {
+                form.addEventListener("submit", function(e) {
+                    var btn = form.querySelector("button[type=submit]");
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Loading...';
+                    }
+                });
+            });
+        });
+    </script>
     @stack("scripts")
 </body>
 </html>

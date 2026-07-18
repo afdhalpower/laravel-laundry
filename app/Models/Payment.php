@@ -2,23 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Payment extends Model
 {
-    use HasFactory;
-
-    protected $fillable = ['order_id', 'tgl_bayar', 'jumlah', 'metode', 'keterangan'];
+    protected $fillable = ["order_id", "tgl_bayar", "jumlah", "metode", "keterangan"];
 
     protected function casts(): array
     {
         return [
-            'tgl_bayar' => 'date',
+            "jumlah" => "decimal:0",
+            "tgl_bayar" => "date",
         ];
     }
 
-    public function order()
+    public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }

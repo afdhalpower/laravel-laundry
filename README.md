@@ -41,6 +41,7 @@
 | 📝 **Activity Log** | Tracking semua perubahan data untuk keamanan & audit |
 | ⚙️ **Multi-Role** | Akses dibatasi: Admin (full), Kasir (transaksi), Owner (laporan) |
 | 🌗 **Dark Mode** | Toggle tema terang/gelap yang persisten |
+| 🛡️ **Stability & Safety** | **Double submission prevention**, **Order lifecycle lock** (status selesai tidak bisa diubah), **Backup database command** |
 
 ---
 

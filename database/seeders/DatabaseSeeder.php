@@ -14,6 +14,21 @@ class DatabaseSeeder extends Seeder
             "name" => "Admin Laundry",
             "email" => "admin@laundryku.com",
             "password" => bcrypt("password"),
+            "role" => "admin",
+        ]);
+
+        User::factory()->create([
+            "name" => "Kasir Laundry",
+            "email" => "kasir@laundryku.com",
+            "password" => bcrypt("password"),
+            "role" => "kasir",
+        ]);
+
+        User::factory()->create([
+            "name" => "Owner Laundry",
+            "email" => "owner@laundryku.com",
+            "password" => bcrypt("password"),
+            "role" => "owner",
         ]);
 
         // Default site settings for landing page

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\LoyaltyPoint;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Milon\Barcode\DNS1D;
 
 class OrderController extends Controller
 {
@@ -120,6 +122,11 @@ class OrderController extends Controller
 
         $order->update($validated);
 
+        // Award loyalty points if order is being completed
+        if ($isBeingCompleted) {
+            $order->customer->earnPoints($order);
+        }
+
         return redirect()->route("orders.show", $order)
             ->with("success", "Status transaksi berhasil diupdate.");
     }
@@ -141,6 +148,20 @@ class OrderController extends Controller
     {
         $order->load(["customer", "items.service", "payments"]);
         return view("orders.invoice", compact("order"));
+    }
+
+    public function label(Order $order)
+    {
+        $order->load(["customer", "items"]);
+
+        try {
+            $barcode = new DNS1D();
+            $barcodeSvg = $barcode->getBarcodeSVG($order->no_order, "C128", 2, 45, "black", true);
+        } catch (\Exception $e) {
+            $barcodeSvg = null;
+        }
+
+        return view("orders.label", compact("order", "barcodeSvg"));
     }
 
     public function trash()
