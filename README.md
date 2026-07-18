@@ -1,92 +1,165 @@
 <div align="center">
+  <br>
   <h1>🧺 LaundryKu</h1>
-  <p>Aplikasi Manajemen Laundry berbasis Laravel — simple, cepat, dan siap shared hosting.</p>
+  <p><strong>Aplikasi Manajemen Laundry</strong> — berbasis Laravel 11, dirancang untuk usaha laundry kecil & menengah.</p>
+  <p>
+    <img src="https://img.shields.io/badge/Laravel-11-FF2D20?logo=laravel" alt="Laravel 11">
+    <img src="https://img.shields.io/badge/PHP-8.3-777BB4?logo=php" alt="PHP 8.3">
+    <img src="https://img.shields.io/badge/SQLite-003B57?logo=sqlite" alt="SQLite">
+    <img src="https://img.shields.io/badge/Bootstrap-5-7952B3?logo=bootstrap" alt="Bootstrap 5">
+    <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License">
+  </p>
+  <br>
 </div>
+
+## 📋 Daftar Isi
+
+- [Fitur](#-fitur)
+- [Prasyarat](#-prasyarat)
+- [Instalasi](#-instalasi)
+- [Login Default](#-login-default)
+- [Deployment](#-deployment-ke-shared-hosting)
+- [Struktur Database](#-struktur-database)
+- [Tampilan](#-tampilan)
+- [Tech Stack](#-tech-stack)
+- [Lisensi](#-lisensi)
+
+---
 
 ## ✨ Fitur
 
 | Fitur | Keterangan |
 |-------|------------|
-| 👥 **Manajemen Pelanggan** | Tambah, edit, hapus, cari pelanggan |
-| 🛠️ **Layanan Laundry** | Kelola layanan kiloan & satuan dengan harga |
-| 📋 **Transaksi / Order** | Buat order, pilih layanan, tracking status |
-| 🔄 **Status Tracking** | Diterima → Dicuci → Dikeringkan → Disetrika → Dilipat → Siap → Diantar → Selesai |
-| 💰 **Pembayaran** | Catat pembayaran, histori, status lunas |
-| 🖨️ **Invoice** | Cetak struk invoice (thermal printer ready) |
-| 📊 **Dashboard** | Statistik real-time, grafik 7 hari |
-| 📈 **Laporan** | Filter tanggal, grafik pendapatan, detail transaksi |
+| 👥 **Manajemen Pelanggan** | CRUD pelanggan dengan pencarian |
+| 🛠️ **Layanan Laundry** | Kelola layanan kiloan & satuan, masing-masing dengan harga dan estimasi |
+| 📋 **Transaksi / Order** | Buat order dengan multiple item, pilih layanan, tracking status otomatis |
+| 🔄 **Status Tracking** | Alur: Diterima → Dicuci → Dikeringkan → Disetrika → Dilipat → Siap → Diantar → Selesai |
+| 💰 **Pembayaran** | Catat pembayaran, histori cicilan, indikator lunas/sisa otomatis |
+| 🖨️ **Invoice** | Cetak struk invoice, siap untuk thermal printer 58mm |
+| 📊 **Dashboard** | Statistik real-time (hari ini & 7 hari), grafik pendapatan, order terbaru |
+| 📈 **Laporan** | Filter tanggal, grafik pendapatan, daftar transaksi lengkap |
+| 🌐 **Landing Page** | Halaman publik dengan hero, layanan, testimoni, galeri, dan CTA WhatsApp — dapat dikelola dari admin |
+| 📱 **Responsive** | Bootstrap 5, mobile-first, bekerja di HP & desktop |
 
-## 🚀 Instalasi
+---
 
-### Prasyarat
+## 🚀 Prasyarat
 
-- PHP 8.1+
-- Composer
-- SQLite (dev) / MySQL (production)
+- **PHP** 8.1 atau lebih baru
+- **Composer** 2.x
+- **Database** SQLite (pengembangan) / MySQL 5.7+ (produksi)
+- **Ekstensi PHP**: `bcmath`, `ctype`, `fileinfo`, `json`, `mbstring`, `openssl`, `pdo`, `tokenium`, `xml`
 
-### Langkah Instalasi
+---
+
+## 🛠️ Instalasi
 
 ```bash
-# Clone repositori
+# 1. Clone repositori
 git clone https://github.com/afdhalpower/laravel-laundry.git
 cd laravel-laundry
 
-# Install dependencies
+# 2. Install dependency PHP
 composer install --no-dev --optimize-autoloader
 
-# Copy & setup environment
+# 3. Copy environment
 cp .env.example .env
 php artisan key:generate
 
-# Setup database (SQLite default)
+# 4. Setup database (SQLite — default untuk development)
 touch database/database.sqlite
 
-# Migrate & seed
+# 5. Migrasi & seed data awal
 php artisan migrate --seed
 
-# Setup storage
+# 6. Buat symbolic link storage
 php artisan storage:link
 
-# Jalankan
+# 7. Jalankan development server
 php artisan serve
 ```
 
-### Login Default
+Akses di **http://localhost:8000**
+
+> **Catatan:** Untuk MySQL, ubah `DB_CONNECTION=sqlite` menjadi `DB_CONNECTION=mysql` di `.env` dan isi kredensial database.
+
+---
+
+## 🔐 Login Default
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | `admin@laundry.test` | `password` |
+| Admin | `admin@laundryku.com` | `password` |
+
+> ⚠️ **Segera ganti password** setelah pertama kali login pada lingkungan produksi.
+
+---
 
 ## 🏗️ Deployment ke Shared Hosting
 
-1. **Upload semua file** ke hosting (kecuali folder `storage` bawaan)
-2. **Set Document Root** ke folder `public/`
-3. **Buat database MySQL** lewat phpMyAdmin / cPanel
-4. **Edit `.env`**: ganti `DB_CONNECTION=sqlite` → `mysql` dan isi kredensial
-5. **Jalankan** `php artisan migrate --seed` via SSH/Terminal
-6. Set **permission** folder `storage/` dan `bootstrap/cache/` ke `755`
+| Langkah | Detail |
+|---------|--------|
+| **1. Upload** | Upload semua file ke hosting (kecuali folder `storage` bawaan Laravel) |
+| **2. Document Root** | Arahkan Document Root ke folder `public/` |
+| **3. Database** | Buat database MySQL via phpMyAdmin / cPanel |
+| **4. Environment** | Edit `.env` — ganti `sqlite` → `mysql`, isi kredensial DB |
+| **5. Migrasi** | Jalankan `php artisan migrate --seed` via SSH/Terminal |
+| **6. Permission** | Set permission `storage/` dan `bootstrap/cache/` ke `755` |
+| **7. Selesai** | Website siap diakses |
+
+---
 
 ## 🗂️ Struktur Database
 
 ```
-customers → orders → order_items → services
-                    → payments
+customers ──→ orders ──→ order_items ──→ services
+                  │
+                  └──→ payments
 ```
+
+### Model Utama
+
+| Model | Tabel | Keterangan |
+|-------|-------|------------|
+| `Customer` | `customers` | Data pelanggan (nama, telepon, alamat) |
+| `Service` | `services` | Jenis layanan (nama, tipe, harga, estimasi) |
+| `Order` | `orders` | Transaksi utama (no_order, tgl, status, total) |
+| `OrderItem` | `order_items` | Item detail transaksi (layanan, berat/jumlah, subtotal) |
+| `Payment` | `payments` | Riwayat pembayaran (jumlah, metode, tanggal) |
+| `SiteSetting` | `site_settings` | Pengaturan landing page (hero, tentang, kontak) |
+| `Testimonial` | `testimonials` | Testimoni pelanggan untuk landing page |
+| `Gallery` | `galleries` | Foto galeri untuk landing page |
+
+---
 
 ## 🎨 Tampilan
 
-- **Sidebar**: Navigasi fixed di kiri dengan background gradasi navy
-- **Dashboard**: 4 kartu statistik + grafik Chart.js + order terbaru
-- **Desain**: Bootstrap 5, Inter font, mobile responsive
-- **Bahasa**: Indonesia (UI sepenuhnya dalam Bahasa Indonesia)
+| Area | Teknologi |
+|------|-----------|
+| **Admin Panel** | Bootstrap 5.3, sidebar gradasi navy, Inter font |
+| **Landing Page** | Custom design, bento grid, scroll reveal animation, responsive |
+| **Dashboard** | 4 kartu statistik + grafik Chart.js (7 hari) + daftar order terbaru |
+| **Invoice** | Via Bootstrap, siap cetak thermal printer 58mm |
+| **Notifikasi** | Flash message sukses/error via Bootstrap alert |
+| **Auth** | Laravel Breeze Blade dengan layout konsisten |
+
+---
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Laravel 11, PHP 8.3
-- **Database**: SQLite (dev) / MySQL (production)
-- **Frontend**: Bootstrap 5, Chart.js, Bootstrap Icons
-- **Auth**: Laravel Breeze (Blade)
+| Layer | Teknologi |
+|-------|-----------|
+| **Backend** | Laravel 11, PHP 8.3 |
+| **Database** | SQLite (dev) / MySQL 5.7+ (prod) |
+| **Frontend** | Bootstrap 5.3, Chart.js 4, Bootstrap Icons |
+| **Auth** | Laravel Breeze (Blade + Tailwind CSS) |
+| **Font** | Inter (Google Fonts) |
+| **Animasi** | Intersection Observer API, CSS transitions |
+
+---
 
 ## 📄 Lisensi
 
-MIT — afdhalpower
+**MIT License** — © 2026 [afdhalpower](https://github.com/afdhalpower)
+
+Dipersilakan untuk digunakan, dimodifikasi, dan didistribusikan kembali.
