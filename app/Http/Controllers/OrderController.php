@@ -137,4 +137,24 @@ class OrderController extends Controller
         $order->load(["customer", "items.service", "payments"]);
         return view("orders.invoice", compact("order"));
     }
+
+    public function trash()
+    {
+        $orders = Order::onlyTrashed()
+            ->with("customer")
+            ->latest("deleted_at")
+            ->paginate(15);
+
+        return view("orders.trash", compact("orders"));
+    }
+
+    public function restore($id)
+    {
+        $order = Order::onlyTrashed()->findOrFail($id);
+        $order->restore();
+
+        return redirect()->route("orders.trash")
+            ->with("success", "Order berhasil direstore.");
+    }
+
 }

@@ -44,7 +44,7 @@
                     @forelse($customers as $customer)
                     <tr>
                         <td>{{ $loop->iteration + ($customers->currentPage() - 1) * $customers->perPage() }}</td>
-                        <td class="fw-medium">{{ $customer->nama }}</td>
+                        <td class="fw-medium"><a href="{{ route("customers.show", $customer) }}" class="text-decoration-none">{{ $customer->nama }}</a></td>
                         <td>{{ $customer->no_telp }}</td>
                         <td class="text-muted small">{{ Str::limit($customer->alamat, 40) ?? "-" }}</td>
                         <td><span class="badge bg-secondary">{{ $customer->orders_count ?? 0 }}</span></td>

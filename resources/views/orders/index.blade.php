@@ -4,10 +4,15 @@
 
 @section("content")
 <div class="page-title">
-    <span>{{ $orders->total() }} transaksi</span>
-    <a href="{{ route("orders.create") }}" class="btn btn-primary">
-        <i class="bi bi-plus-lg"></i> Transaksi Baru
-    </a>
+    <span>Total: {{ $orders->total() }} transaksi</span>
+    <div class="d-flex gap-2">
+        <a href="{{ route("orders.trash") }}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-trash"></i> Trash
+        </a>
+        <a href="{{ route("orders.create") }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Transaksi Baru
+        </a>
+    </div>
 </div>
 
 <div class="card">
@@ -80,6 +85,10 @@
                             <a href="{{ route("orders.invoice", $order) }}" class="btn btn-sm btn-outline-secondary" title="Invoice" target="_blank">
                                 <i class="bi bi-printer"></i>
                             </a>
+                            <form action="{{ route("orders.destroy", $order) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus order ini? Data akan dipindah ke trash.')">
+                                @csrf @method("DELETE")
+                                <button class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash"></i></button>
+                            </form>
                         </td>
                     </tr>
                     @empty

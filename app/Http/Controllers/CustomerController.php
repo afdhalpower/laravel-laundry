@@ -25,6 +25,18 @@ class CustomerController extends Controller
         return view("customers.index", compact("customers"));
     }
 
+    public function show(Customer $customer)
+    {
+        $customer->loadCount("orders");
+
+        $orders = $customer->orders()
+            ->with("customer")
+            ->latest()
+            ->paginate(15);
+
+        return view("customers.show", compact("customer", "orders"));
+    }
+
     public function create()
     {
         return view("customers.create");

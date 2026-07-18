@@ -158,6 +158,39 @@
                         <div class="d-flex justify-content-between small mb-1">
                             <span>{{ $pm->tgl_bayar->format("d/m/Y") }} <span class="badge bg-light text-dark">{{ ucfirst($pm->metode) }}</span></span>
                             <span class="fw-semibold">Rp {{ number_format($pm->jumlah, 0, ",", ".") }}</span>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#editPm{{ $pm->id }}">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <form action="{{ route("payments.destroy", $pm) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus pembayaran ini?')">
+                                    @csrf @method("DELETE")
+                                    <button class="btn btn-outline-danger btn-sm"><i class="bi bi-x"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                        {{-- Edit form inline --}}
+                        <div class="collapse mt-2 mb-2 p-2 bg-light rounded" id="editPm{{ $pm->id }}">
+                            <form action="{{ route("payments.update", $pm) }}" method="POST">
+                                @csrf @method("PATCH")
+                                <div class="row g-2">
+                                    <div class="col-4">
+                                        <input type="date" name="tgl_bayar" class="form-control form-control-sm" value="{{ $pm->tgl_bayar->format("Y-m-d") }}" required>
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="number" name="jumlah" class="form-control form-control-sm" value="{{ $pm->jumlah }}" step="1" min="1" required>
+                                    </div>
+                                    <div class="col-3">
+                                        <select name="metode" class="form-select form-select-sm">
+                                            <option value="tunai" {{ $pm->metode == "tunai" ? "selected" : "" }}>Tunai</option>
+                                            <option value="transfer" {{ $pm->metode == "transfer" ? "selected" : "" }}>Transfer</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-2">
+                                        <button class="btn btn-sm btn-primary w-100">Simpan</button>
+                                    </div>
+                                </div>
+                                <input type="text" name="keterangan" class="form-control form-control-sm mt-1" placeholder="Keterangan" value="{{ $pm->keterangan }}">
+                            </form>
                         </div>
                     @endforeach
                 @endif
@@ -169,5 +202,9 @@
 <div class="mt-3">
     <a href="{{ route("orders.index") }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Kembali</a>
     <a href="{{ route("orders.invoice", $order) }}" class="btn btn-outline-primary" target="_blank"><i class="bi bi-printer"></i> Cetak Invoice</a>
+    <form action="{{ route("orders.destroy", $order) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus order ini? Data akan dipindah ke trash.')">
+        @csrf @method("DELETE")
+        <button class="btn btn-outline-danger"><i class="bi bi-trash"></i> Hapus Order</button>
+    </form>
 </div>
 @endsection

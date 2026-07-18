@@ -32,13 +32,18 @@ Route::middleware(["auth", "verified"])->group(function () {
     Route::resource("customers", CustomerController::class);
     Route::resource("services", ServiceController::class);
 
+    Route::get("/orders/trash", [OrderController::class, "trash"])->name("orders.trash");
+    Route::patch("/orders/{id}/restore", [OrderController::class, "restore"])->name("orders.restore");
     Route::get("/orders/{order}/payment", [OrderController::class, "payment"])->name("orders.payment");
     Route::get("/orders/{order}/invoice", [OrderController::class, "invoice"])->name("orders.invoice");
     Route::resource("orders", OrderController::class);
 
     Route::post("/payments", [PaymentController::class, "store"])->name("payments.store");
+    Route::patch("/payments/{payment}", [PaymentController::class, "update"])->name("payments.update");
+    Route::delete("/payments/{payment}", [PaymentController::class, "destroy"])->name("payments.destroy");
 
     Route::get("/reports", [ReportController::class, "index"])->name("reports");
+    Route::get("/reports/export", [ReportController::class, "export"])->name("reports.export");
 
     Route::get("/profile", [ProfileController::class, "edit"])->name("profile.edit");
     Route::patch("/profile", [ProfileController::class, "update"])->name("profile.update");
