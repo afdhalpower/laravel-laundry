@@ -96,6 +96,8 @@
             <div class="card-body">
                 <form action="{{ route("orders.update", $order) }}" method="POST">
                     @csrf @method("PUT")
+                    <input type="hidden" name="customer_id" value="{{ $order->customer_id }}">
+                    <input type="hidden" name="tgl_masuk" value="{{ $order->tgl_masuk->format("Y-m-d") }}">
                     <div class="mb-3">
                         <label class="form-label">Status</label>
                         <select name="status" class="form-select">
