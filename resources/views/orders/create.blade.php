@@ -93,7 +93,7 @@
 <script>
 const services = @json($services);
 
-function tambatItem(data = null) {
+function tambahItem(data = null) {
     const container = document.getElementById("items-container");
     const idx = container.children.length;
     const row = document.createElement("tr");
