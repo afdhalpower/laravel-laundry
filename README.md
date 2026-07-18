@@ -30,12 +30,14 @@
 
 | Fitur | Keterangan |
 |-------|------------|
-| 👥 **Manajemen Pelanggan** | CRUD pelanggan dengan pencarian |
+| 👥 **Manajemen Pelanggan** | CRUD pelanggan dengan pencarian, **detail + riwayat transaksi** |
 | 🛠️ **Layanan Laundry** | Kelola layanan kiloan & satuan, masing-masing dengan harga dan estimasi |
 | 📋 **Transaksi / Order** | Buat order dengan multiple item, pilih layanan, tracking status otomatis |
 | 🔄 **Status Tracking** | Alur: Diterima → Dicuci → Dikeringkan → Disetrika → Dilipat → Siap → Diantar → Selesai |
-| 🔍 **Cek Status Publik** | Pelanggan cek status pakaian via **landing page** menggunakan nomor order dari invoice |
-| 💰 **Pembayaran** | Catat pembayaran, histori cicilan, indikator lunas/sisa otomatis |
+| 🔍 **Cek Status Publik** | Pelanggan cek status pakaian via **landing page** menggunakan nomor order dari invoice + **progress timeline visual** |
+| 💰 **Pembayaran** | Catat pembayaran, histori cicilan, **edit/hapus pembayaran**, indikator lunas/sisa otomatis, **auto-advance status** saat lunas |
+| 🗑️ **Trash & Restore** | Order yang dihapus masuk ke **Trash**, bisa direstore kapan saja |
+| 📊 **Export Excel** | Laporan bisa **diexport ke format Excel (.xlsx)** |
 | 🖨️ **Invoice** | Cetak struk invoice, siap untuk thermal printer 58mm |
 | 📊 **Dashboard** | Statistik real-time (hari ini & 7 hari), grafik pendapatan, order terbaru |
 | 📈 **Laporan** | Filter tanggal, grafik pendapatan, daftar transaksi lengkap |
@@ -124,7 +126,7 @@ customers ──→ orders ──→ order_items ──→ services
 |-------|-------|------------|
 | `Customer` | `customers` | Data pelanggan (nama, telepon, alamat) |
 | `Service` | `services` | Jenis layanan (nama, tipe, harga, estimasi) |
-| `Order` | `orders` | Transaksi utama (no_order, tgl, status, total) |
+| `Order` | `orders` | Transaksi utama (no_order, tgl, status, total, soft delete) |
 | `OrderItem` | `order_items` | Item detail transaksi (layanan, berat/jumlah, subtotal) |
 | `Payment` | `payments` | Riwayat pembayaran (jumlah, metode, tanggal) |
 | `SiteSetting` | `site_settings` | Pengaturan landing page (hero, tentang, kontak) |
@@ -150,8 +152,10 @@ Masukkan No. Order → lihat status real-time + progress timeline
 | **Admin Panel** | Bootstrap 5.3, sidebar gradasi navy, Inter font |
 | **Landing Page** | Custom design, bento grid, scroll reveal animation, responsive |
 | **Cek Status** | Halaman publik dengan search bar, kartu info, progress timeline 8 tahap, tabel layanan, status bayar |
+| **Detail Pelanggan** | Kartu info pelanggan + tabel riwayat transaksi dengan pagination |
 | **Dashboard** | 4 kartu statistik + grafik Chart.js (7 hari) + daftar order terbaru |
 | **Invoice** | Via Bootstrap, siap cetak thermal printer 58mm |
+| **Trash Order** | Daftar order yang dihapus dengan tombol restore |
 | **Notifikasi** | Flash message sukses/error via Bootstrap alert |
 | **Auth** | Laravel Breeze Blade dengan layout konsisten |
 
@@ -164,6 +168,7 @@ Masukkan No. Order → lihat status real-time + progress timeline
 | **Backend** | Laravel 11, PHP 8.3 |
 | **Database** | SQLite (dev) / MySQL 5.7+ (prod) |
 | **Frontend** | Bootstrap 5.3, Chart.js 4, Bootstrap Icons |
+| **Export** | Laravel Excel (Maatwebsite) — format .xlsx |
 | **Auth** | Laravel Breeze (Blade + Tailwind CSS) |
 | **Font** | Inter (Google Fonts) |
 | **Animasi** | Intersection Observer API, CSS transitions |
