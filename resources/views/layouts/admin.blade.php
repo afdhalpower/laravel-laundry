@@ -91,6 +91,16 @@
         <a href="{{ route("reports") }}" class="nav-link {{ request()->routeIs("reports") ? "active" : "" }}">
             <i class="bi bi-bar-chart"></i> Laporan
         </a>
+        <div class="nav-section mt-3">Halaman Depan</div>
+        <a href="{{ route("admin.landing-settings.index") }}" class="nav-link {{ request()->routeIs("admin.landing-settings.*") ? "active" : "" }}">
+            <i class="bi bi-sliders"></i> Pengaturan
+        </a>
+        <a href="{{ route("admin.testimonials.index") }}" class="nav-link {{ request()->routeIs("admin.testimonials.*") ? "active" : "" }}">
+            <i class="bi bi-star"></i> Testimoni
+        </a>
+        <a href="{{ route("admin.galleries.index") }}" class="nav-link {{ request()->routeIs("admin.galleries.*") ? "active" : "" }}">
+            <i class="bi bi-images"></i> Galeri
+        </a>
         <div class="nav-section mt-3">Akun</div>
         <a href="{{ route("profile.edit") }}" class="nav-link">
             <i class="bi bi-person"></i> Profil
