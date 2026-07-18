@@ -136,6 +136,7 @@
             <a href="#testimoni">Testimoni</a>
             <a href="#galeri">Galeri</a>
             <a href="#kontak">Kontak</a>
+            <a href="{{ route("cek.status") }}"><i class="bi bi-search me-1"></i>Cek Status</a>
             @if ($settings["whatsapp_number"] ?? null)
                 <a href="https://wa.me/{{ $settings["whatsapp_number"] }}" class="btn-wa" target="_blank">
                     <i class="bi bi-whatsapp"></i> {{ $settings["hero_cta_text"] ?? "Pesan" }}
