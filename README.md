@@ -34,11 +34,12 @@
 | 🛠️ **Layanan Laundry** | Kelola layanan kiloan & satuan, masing-masing dengan harga dan estimasi |
 | 📋 **Transaksi / Order** | Buat order dengan multiple item, pilih layanan, tracking status otomatis |
 | 🔄 **Status Tracking** | Alur: Diterima → Dicuci → Dikeringkan → Disetrika → Dilipat → Siap → Diantar → Selesai |
+| 🔍 **Cek Status Publik** | Pelanggan cek status pakaian via **landing page** menggunakan nomor order dari invoice |
 | 💰 **Pembayaran** | Catat pembayaran, histori cicilan, indikator lunas/sisa otomatis |
 | 🖨️ **Invoice** | Cetak struk invoice, siap untuk thermal printer 58mm |
 | 📊 **Dashboard** | Statistik real-time (hari ini & 7 hari), grafik pendapatan, order terbaru |
 | 📈 **Laporan** | Filter tanggal, grafik pendapatan, daftar transaksi lengkap |
-| 🌐 **Landing Page** | Halaman publik dengan hero, layanan, testimoni, galeri, dan CTA WhatsApp — dapat dikelola dari admin |
+| 🌐 **Landing Page** | Halaman publik dengan hero, layanan, testimoni, galeri, CTA WhatsApp, dan **Cek Status** — dikelola dari admin |
 | 📱 **Responsive** | Bootstrap 5, mobile-first, bekerja di HP & desktop |
 
 ---
@@ -130,6 +131,16 @@ customers ──→ orders ──→ order_items ──→ services
 | `Testimonial` | `testimonials` | Testimoni pelanggan untuk landing page |
 | `Gallery` | `galleries` | Foto galeri untuk landing page |
 
+### Alur Cek Status Publik
+
+```
+Admin buat transaksi → cetak invoice dengan No. Order (LND260718XXX)
+                           ↓
+Pelanggan buka https://laundryku.com/cek-status
+                           ↓
+Masukkan No. Order → lihat status real-time + progress timeline
+```
+
 ---
 
 ## 🎨 Tampilan
@@ -138,6 +149,7 @@ customers ──→ orders ──→ order_items ──→ services
 |------|-----------|
 | **Admin Panel** | Bootstrap 5.3, sidebar gradasi navy, Inter font |
 | **Landing Page** | Custom design, bento grid, scroll reveal animation, responsive |
+| **Cek Status** | Halaman publik dengan search bar, kartu info, progress timeline 8 tahap, tabel layanan, status bayar |
 | **Dashboard** | 4 kartu statistik + grafik Chart.js (7 hari) + daftar order terbaru |
 | **Invoice** | Via Bootstrap, siap cetak thermal printer 58mm |
 | **Notifikasi** | Flash message sukses/error via Bootstrap alert |
