@@ -105,6 +105,11 @@ class OrderController extends Controller
 
     public function update(Request $request, Order $order)
     {
+        if ($order->status === "selesai") {
+            return redirect()->route("orders.show", $order)
+                ->with("error", "Transaksi sudah selesai, status tidak bisa diubah lagi.");
+        }
+
         $validated = $request->validate([
             "customer_id" => "required|exists:customers,id",
             "status" => "required|in:diterima,dicuci,dikeringkan,disetrika,dilipat,siap,diantar,selesai",

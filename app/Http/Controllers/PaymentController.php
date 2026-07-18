@@ -18,6 +18,12 @@ class PaymentController extends Controller
             "keterangan" => "nullable|string|max:255",
         ]);
 
+        $order = Order::findOrFail($validated["order_id"]);
+        if ($order->status === "selesai") {
+            return redirect()->route("orders.show", $order)
+                ->with("error", "Transaksi sudah selesai, tidak bisa menambah pembayaran.");
+        }
+
         Payment::create($validated);
 
         $order = Order::findOrFail($validated["order_id"]);
@@ -29,6 +35,11 @@ class PaymentController extends Controller
 
     public function update(Request $request, Payment $payment)
     {
+        if ($payment->order->status === "selesai") {
+            return redirect()->route("orders.show", $payment->order_id)
+                ->with("error", "Transaksi sudah selesai, tidak bisa mengubah pembayaran.");
+        }
+
         $validated = $request->validate([
             "tgl_bayar" => "required|date",
             "jumlah" => "required|numeric|min:1",
@@ -47,6 +58,11 @@ class PaymentController extends Controller
 
     public function destroy(Payment $payment)
     {
+        if ($payment->order->status === "selesai") {
+            return redirect()->route("orders.show", $payment->order_id)
+                ->with("error", "Transaksi sudah selesai, tidak bisa menghapus pembayaran.");
+        }
+
         $orderId = $payment->order_id;
         $payment->delete();
 

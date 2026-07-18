@@ -94,28 +94,39 @@
         <div class="card mb-3">
             <div class="card-header"><i class="bi bi-arrow-repeat me-1"></i> Update Status</div>
             <div class="card-body">
-                <form action="{{ route("orders.update", $order) }}" method="POST">
-                    @csrf @method("PUT")
-                    <input type="hidden" name="customer_id" value="{{ $order->customer_id }}">
-                    <input type="hidden" name="tgl_masuk" value="{{ $order->tgl_masuk->format("Y-m-d") }}">
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <select name="status" class="form-select">
-                            @foreach(["diterima","dicuci","dikeringkan","disetrika","dilipat","siap","diantar","selesai"] as $st)
-                                <option value="{{ $st }}" {{ $order->status == $st ? "selected" : "" }}>
-                                    {{ ucfirst($st) }}
-                                </option>
-                            @endforeach
-                        </select>
+                @if($order->status === "selesai")
+                    <div class="text-center py-3">
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center mx-auto mb-3"
+                            style="width: 64px; height: 64px; font-size: 1.75rem;">
+                            <i class="bi bi-check-lg"></i>
+                        </div>
+                        <h5 class="text-success fw-bold mb-1">✓ Transaksi Selesai</h5>
+                        <p class="text-muted small mb-0">Status tidak dapat diubah lagi.</p>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Tanggal Selesai</label>
-                        <input type="date" name="tgl_selesai" class="form-control" value="{{ $order->tgl_selesai?->format("Y-m-d") ?? "" }}">
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="bi bi-check-lg"></i> Update Status
-                    </button>
-                </form>
+                @else
+                    <form action="{{ route("orders.update", $order) }}" method="POST">
+                        @csrf @method("PUT")
+                        <input type="hidden" name="customer_id" value="{{ $order->customer_id }}">
+                        <input type="hidden" name="tgl_masuk" value="{{ $order->tgl_masuk->format("Y-m-d") }}">
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select name="status" class="form-select">
+                                @foreach(["diterima","dicuci","dikeringkan","disetrika","dilipat","siap","diantar","selesai"] as $st)
+                                    <option value="{{ $st }}" {{ $order->status == $st ? "selected" : "" }}>
+                                        {{ ucfirst($st) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tanggal Selesai</label>
+                            <input type="date" name="tgl_selesai" class="form-control" value="{{ $order->tgl_selesai?->format("Y-m-d") ?? "" }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-check-lg"></i> Update Status
+                        </button>
+                    </form>
+                @endif
             </div>
         </div>
 
@@ -123,9 +134,13 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between">
                 <span><i class="bi bi-wallet me-1"></i> Pembayaran</span>
-                <a href="{{ route("orders.payment", $order) }}" class="btn btn-sm btn-success">
-                    <i class="bi bi-plus"></i> Bayar
-                </a>
+                @if($order->status === "selesai")
+                    <span class="badge bg-success fs-6"><i class="bi bi-check-circle"></i> Lunas & Selesai</span>
+                @else
+                    <a href="{{ route("orders.payment", $order) }}" class="btn btn-sm btn-success">
+                        <i class="bi bi-plus"></i> Bayar
+                    </a>
+                @endif
             </div>
             <div class="card-body">
                 @php
@@ -158,6 +173,7 @@
                         <div class="d-flex justify-content-between small mb-1">
                             <span>{{ $pm->tgl_bayar->format("d/m/Y") }} <span class="badge bg-light text-dark">{{ ucfirst($pm->metode) }}</span></span>
                             <span class="fw-semibold">Rp {{ number_format($pm->jumlah, 0, ",", ".") }}</span>
+                            @if($order->status !== "selesai")
                             <div class="btn-group btn-group-sm">
                                 <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#editPm{{ $pm->id }}">
                                     <i class="bi bi-pencil"></i>
@@ -167,8 +183,10 @@
                                     <button class="btn btn-outline-danger btn-sm"><i class="bi bi-x"></i></button>
                                 </form>
                             </div>
+                            @endif
                         </div>
                         {{-- Edit form inline --}}
+                        @if($order->status !== "selesai")
                         <div class="collapse mt-2 mb-2 p-2 bg-light rounded" id="editPm{{ $pm->id }}">
                             <form action="{{ route("payments.update", $pm) }}" method="POST">
                                 @csrf @method("PATCH")
@@ -192,6 +210,7 @@
                                 <input type="text" name="keterangan" class="form-control form-control-sm mt-1" placeholder="Keterangan" value="{{ $pm->keterangan }}">
                             </form>
                         </div>
+                        @endif
                     @endforeach
                 @endif
             </div>
