@@ -1,6 +1,6 @@
 @extends("layouts.admin")
 @section("title", "Detail Order")
-@section("page_title", "Detail Order #{{ $order->no_order }}")
+@section("page_title", "Detail Order #" . $order->no_order)
 
 @section("content")
 <div class="row">

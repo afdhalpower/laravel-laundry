@@ -1,6 +1,6 @@
 @extends("layouts.admin")
 @section("title", "Edit Order")
-@section("page_title", "Edit Order #{{ $order->no_order }}")
+@section("page_title", "Edit Order #" . $order->no_order)
 
 @section("content")
 <form action="{{ route("orders.update", $order) }}" method="POST">

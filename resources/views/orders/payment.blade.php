@@ -1,6 +1,6 @@
 @extends("layouts.admin")
 @section("title", "Pembayaran")
-@section("page_title", "Pembayaran #{{ $order->no_order }}")
+@section("page_title", "Pembayaran #" . $order->no_order)
 
 @section("content")
 <div class="row justify-content-center">
